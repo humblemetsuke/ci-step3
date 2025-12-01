@@ -7,21 +7,28 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch:  # allows manual runs
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.14
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
+
       - name: Install dependencies
         run: poetry install --no-root
-      - name: Lint & Format
+
+      - name: Lint & format checks
         run: |
           poetry run flake8 .
           poetry run black --check .
@@ -29,15 +36,22 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: lint # only runs if lint passes
+    needs: lint  # only run if lint passes
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.14
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
+
       - name: Install dependencies
         run: poetry install --no-root
-      - name: Run Tests
+
+      - name: Run tests
         run: poetry run pytest
