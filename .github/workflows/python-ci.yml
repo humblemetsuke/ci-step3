@@ -55,7 +55,7 @@ jobs:
         run: poetry run pytest
 
       - name: Run tests with coverage
-        run: poetry run pytest --cov=ci-cd3 --cov-report=xml
+        run: poetry run pytest --cov=ci-cd3 --cov-report=xml:coverage.xml
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
